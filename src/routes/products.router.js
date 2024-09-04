@@ -4,12 +4,22 @@ import ProductManager from '../service/ProductManager.js'
 const router = Router()
 const productManager = new ProductManager()
 
-// GET
+// GET vista home.handlebars
 router.get('/products', async (req, res) => {
     try {
         const limit = req.query.limit ? parseInt(req.query.limit) : undefined
         const products = await productManager.getAllProducts(limit)
-        res.json(products)
+        res.render('home', {products})
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+// GET vista realTimeProducts.handlebars
+router.get('/realtimeproducts', async (req, res) => {
+    try {
+        const products = await productManager.getAllProducts() 
+        res.render('realTimeProducts', {products})
     } catch (error) {
         console.log(error);
     }

@@ -1,0 +1,25 @@
+<form id="productForm">
+    <input type="text" id="name" placeholder="Product Name" required>
+    <input type="text" id="description" placeholder="Description" required>
+    <input type="number" id="price" placeholder="Price" required>
+    <input type="number" id="stock" placeholder="Stock" required>
+    <input type="text" id="category" placeholder="Category" required>
+    <button type="submit">Añadir producto</button>
+</form>
+
+<div class="container_product">
+    {{#each products}}
+        <div>
+            <h2>{{this.title}}</h2>
+            <p>Description: {{this.description}}</p>
+            <p>Price: ${{this.price}}</p>
+            <p>Stock: {{this.stock}}</p>
+            <p>Categoria: {{this.category}}</p>
+        </div>
+    {{/each}}
+</div>
+
+
+{{!-- Scripts para Socket --}}
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>
