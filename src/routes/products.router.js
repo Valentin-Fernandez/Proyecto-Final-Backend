@@ -16,13 +16,8 @@ router.get('/products', async (req, res) => {
 })
 
 // GET vista realTimeProducts.handlebars
-router.get('/realtimeproducts', async (req, res) => {
-    try {
-        const products = await productManager.getAllProducts() 
-        res.render('realTimeProducts', {products})
-    } catch (error) {
-        console.log(error);
-    }
+router.get('/realtimeproducts', (req, res) => {
+    res.render('realTimeProducts')
 })
 
 router.get('/products/:pid', async (req, res) => {

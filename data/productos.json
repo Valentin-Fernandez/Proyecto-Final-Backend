@@ -1,29 +1,20 @@
 [
   {
-    "id": 1,
-    "name": "Ariel Valentin Fernandez",
-    "description": "Hola",
-    "price": "232",
-    "stock": "232",
-    "category": "Bermuda",
-    "status": true
-  },
-  {
     "id": 2,
-    "name": "Ariel Valentin Fernandez",
-    "description": "hadasda",
-    "price": "21",
-    "stock": "2",
-    "category": "gadsa",
+    "title": "Heladera",
+    "description": "Heladera con frezzer",
+    "price": "1000000",
+    "stock": "20",
+    "category": "Electrodomesticos",
     "status": true
   },
   {
     "id": 3,
-    "name": "Burlando",
-    "description": "dsada",
-    "price": "31231",
-    "stock": "31231",
-    "category": "asdasda",
+    "title": "Lavarropas",
+    "description": "Lavarropas automatico",
+    "price": "800000",
+    "stock": "15",
+    "category": "Electrodomesticos",
     "status": true
   }
 ]

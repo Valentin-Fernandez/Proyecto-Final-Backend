@@ -1,5 +1,5 @@
 <form id="productForm">
-    <input type="text" id="name" placeholder="Product Name" required>
+    <input type="text" id="title" placeholder="Product Name" required>
     <input type="text" id="description" placeholder="Description" required>
     <input type="number" id="price" placeholder="Price" required>
     <input type="number" id="stock" placeholder="Stock" required>
@@ -15,11 +15,10 @@
             <p>Price: ${{this.price}}</p>
             <p>Stock: {{this.stock}}</p>
             <p>Categoria: {{this.category}}</p>
+            <button class="delete_product" data-id="{{this.id}}">Eliminar</button>
         </div>
     {{/each}}
 </div>
-
-
 {{!-- Scripts para Socket --}}
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realTimeProducts.js"></script>

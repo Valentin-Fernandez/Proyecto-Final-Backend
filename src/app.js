@@ -32,11 +32,27 @@ const io = new Server(httpServer)
 io.on('connection', socket => {
     console.log('Nuevo cliente conectado');
 
-    socket.on('createProduct', data => {
-        // Verifica que "name" y otros campos estén en el objeto
-        console.log('Producto recibido en el servidor:', data);
+    // Detecto que alguien entro en la pagina
+    const products = productManager.getAllProducts()
+    io.emit('mostrarProductos', products)
 
-        const newProduct = productManager.addProduct(data);
-        io.emit('productAdded', newProduct); // Cambiado para coincidir con el cliente
+    // Crear de un producto
+    socket.on('createProduct', data => {
+        productManager.addProduct(data)
+        const updatedProducts = productManager.getAllProducts();
+        io.emit('updateProducts', updatedProducts)
     });
+
+    // Eliminar producto
+    socket.on('deleteProduct', id => {
+        const productDelete = productManager.deleteProduct(parseInt(id))
+        if (productDelete) {
+            const updatedProducts = productManager.getAllProducts();
+            io.emit('updateProducts', updatedProducts)
+        }   
+    })
+
+
+
+    
 });
