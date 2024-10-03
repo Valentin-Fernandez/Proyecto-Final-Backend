@@ -1,20 +1,122 @@
 [
   {
-    "id": 2,
-    "title": "Heladera",
-    "description": "Heladera con frezzer",
-    "price": "1000000",
-    "stock": "20",
-    "category": "Electrodomesticos",
+    "title": "Laptop HP 14",
+    "description": "Laptop de 14 pulgadas con procesador Intel i5 y 8GB de RAM",
+    "price": 550.99,
+    "category": "Electrónica",
+    "stock": 30,
     "status": true
   },
   {
-    "id": 3,
-    "title": "Lavarropas",
-    "description": "Lavarropas automatico",
-    "price": "800000",
-    "stock": "15",
-    "category": "Electrodomesticos",
+    "title": "Auriculares Bluetooth Sony",
+    "description": "Auriculares inalámbricos con cancelación de ruido",
+    "price": 120.00,
+    "category": "Audio",
+    "stock": 50,
+    "status": true
+  },
+  {
+    "title": "Teclado Mecánico Logitech",
+    "description": "Teclado mecánico RGB con interruptores táctiles",
+    "price": 80.75,
+    "category": "Accesorios",
+    "stock": 40,
+    "status": true
+  },
+  {
+    "title": "iPhone 13",
+    "description": "iPhone 13 de 128GB en color azul",
+    "price": 999.99,
+    "category": "Smartphones",
+    "stock": 20,
+    "status": true
+  },
+  {
+    "title": "Smart TV Samsung 55 pulgadas",
+    "description": "Televisor UHD 4K con HDR",
+    "price": 750.00,
+    "category": "Electrónica",
+    "stock": 15,
+    "status": true
+  },
+  {
+    "title": "Cámara Canon EOS 90D",
+    "description": "Cámara réflex digital con sensor de 32.5MP",
+    "price": 1200.50,
+    "category": "Fotografía",
+    "stock": 10,
+    "status": true
+  },
+  {
+    "title": "Mouse inalámbrico Razer",
+    "description": "Mouse ergonómico con sensor óptico de alta precisión",
+    "price": 65.00,
+    "category": "Accesorios",
+    "stock": 60,
+    "status": true
+  },
+  {
+    "title": "Monitor Dell 24 pulgadas",
+    "description": "Monitor Full HD con panel IPS",
+    "price": 200.99,
+    "category": "Electrónica",
+    "stock": 25,
+    "status": true
+  },
+  {
+    "title": "Silla gamer Xtreme",
+    "description": "Silla ergonómica con soporte lumbar ajustable",
+    "price": 180.00,
+    "category": "Muebles",
+    "stock": 35,
+    "status": true
+  },
+  {
+    "title": "Consola PlayStation 5",
+    "description": "Consola de última generación con 1TB de almacenamiento",
+    "price": 499.99,
+    "category": "Videojuegos",
+    "stock": 12,
+    "status": true
+  },
+  {
+    "title": "Zapatillas deportivas Nike Air",
+    "description": "Zapatillas de running con tecnología de amortiguación",
+    "price": 150.00,
+    "category": "Moda",
+    "stock": 45,
+    "status": true
+  },
+  {
+    "title": "Tablet Samsung Galaxy Tab S7",
+    "description": "Tablet de 11 pulgadas con S-Pen incluido",
+    "price": 650.99,
+    "category": "Electrónica",
+    "stock": 22,
+    "status": true
+  },
+  {
+    "title": "Cafetera Nespresso",
+    "description": "Cafetera de cápsulas con diseño compacto",
+    "price": 120.00,
+    "category": "Electrodomésticos",
+    "stock": 70,
+    "status": true
+  },
+  {
+    "title": "Parlante portátil JBL",
+    "description": "Parlante resistente al agua con sonido estéreo",
+    "price": 95.50,
+    "category": "Audio",
+    "stock": 55,
+    "status": true
+  },
+  {
+    "title": "Reloj inteligente Garmin",
+    "description": "Reloj con GPS y monitorización de salud 24/7",
+    "price": 299.99,
+    "category": "Accesorios",
+    "stock": 28,
     "status": true
   }
 ]

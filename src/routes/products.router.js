@@ -1,29 +1,57 @@
 import { Router } from 'express'
 import ProductManager from '../service/ProductManager.js'
+import Product from '../models/products.js'
 
 const router = Router()
 const productManager = new ProductManager()
 
-// GET vista home.handlebars
-router.get('/products', async (req, res) => {
+// GET
+router.get('/', async (req, res) => {
     try {
-        const limit = req.query.limit ? parseInt(req.query.limit) : undefined
-        const products = await productManager.getAllProducts(limit)
-        res.render('home', {products})
+        const {page = 1, category, price} = req.query
+
+        // Categoria
+        let query = {}
+        if (category) {
+            query.category = category
+        }
+
+        // Ordenamiento
+        let sortOption = {}
+        if (price) {
+            sortOption.price = price === 'asc' ? 1 : -1
+        }
+
+
+        let products = await Product.paginate(query, {
+            page: parseInt(page),
+            limit: 5,
+            lean: true,
+            sort: sortOption
+        })
+
+        res.json({
+            status: 'success',
+            payload: products.docs,
+            totalPages: products.totalPages,
+            prevPage: products.hasPrevPage ? products.page - 1 : null,
+            nextPage: products.hasNextPage ? products.page + 1 : null,
+            page: products.page,
+            hasPrevPage: products.hasPrevPage,
+            hasNextPage: products.hasNextPage,
+            prevLink: products.hasPrevPage ? `/products?page=${products.page - 1}` : null,
+            nextLink: products.hasNextPage ? `/products?page=${products.page + 1}` : null,
+          });
+
     } catch (error) {
-        console.log(error);
+        res.json({status: "Error", message: error});
     }
 })
 
-// GET vista realTimeProducts.handlebars
-router.get('/realtimeproducts', (req, res) => {
-    res.render('realTimeProducts')
-})
-
-router.get('/products/:pid', async (req, res) => {
+router.get('/:pid', async (req, res) => {
     try {
-        let reqId = parseInt(req.params.pid)
-        const product = await productManager.getProductById(reqId)
+        let reqId = req.params.pid
+        const product = await productManager.getAllById(reqId)
         if (product) {
             res.json(product)
         } else {
@@ -35,14 +63,13 @@ router.get('/products/:pid', async (req, res) => {
 })
 
 // POST
-router.post('/products', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
-        const {title, description, code, price, stock, category, thumbnails} = req.body
-        if (!title || !description || !code || !price || !stock || !category) {
-            return res.status(400).json({error: "Todos los campos son obligatorios excepto thumbnails"})
+        const {title, description, price, stock, category} = req.body
+        if (!title || !price || !stock) {
+            return res.status(400).json({error: "Todos los campos son obligatorios excepto description y category"})
         }
-
-        const newProduct = await productManager.addProduct({title, description, code, price, stock, category, thumbnails})
+        const newProduct = await productManager.create({title, description, price, stock, category})
         res.status(201).json(newProduct)
     } catch (error) {
         console.log(error);
@@ -50,14 +77,14 @@ router.post('/products', async (req, res) => {
 })
 
 // PUT
-router.put('/products/:pid', async (req, res) => {
+router.put('/:pid', async (req, res) => {
     try {
-        let reqId = parseInt(req.params.pid)
-        const updateProduct = await productManager.updateProduct(reqId, req.body) 
+        let reqId =req.params.pid
+        const updateProduct = await productManager.update(reqId, req.body) 
         if (updateProduct) {
-            res.json(updateProduct)
+            res.json({status: "Success"})
         } else {
-            res.status(404).json({error: "Producto no encontrado"})
+            res.status(404).json({status: "Error, producto no encontrado"})
         }
     } catch (error) {
         console.log(error);
@@ -65,12 +92,12 @@ router.put('/products/:pid', async (req, res) => {
 })
 
 // DELETE
-router.delete('/products/:pid', async (req, res) => {
+router.delete('/:pid', async (req, res) => {
     try {
-        let reqId = parseInt(req.params.pid)
-        const deleteProduct = await productManager.deleteProduct(reqId)
+        let reqId = req.params.pid
+        const deleteProduct = await productManager.delete(reqId)
         if (deleteProduct) {
-            res.json(deleteProduct)
+            res.json({status:"Success"})
         } else {
             res.status(404).json({error: "El producto no fue borrado"})
         }

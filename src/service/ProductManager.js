@@ -1,70 +1,54 @@
-import fs from 'fs/promises'
-import path from 'path'
-
-const productosFilePath = path.resolve('data', 'productos.json')
+import Product from '../models/products.js'
 
 export default class ProductManager {
-    constructor() {
-        this.products = []
-        this.init()
-    }
-
-    async init() {
-        try {
-            const data = await fs.readFile(productosFilePath, 'utf-8')
-            this.products = JSON.parse(data)
-        } catch (error) {
-            this.products = []
-        }
+    constructor(path) {
+        this.path = path
     }
 
     // Metodos
-    saveToFile(){
-        fs.writeFile(productosFilePath, JSON.stringify(this.products, null, 2))
-    }
-
-    getAllProducts(limit){
-        if (limit) {
-            return this.products.slice(0, limit)
+    async getAll(){
+        try {
+            const products = await Product.find().lean()
+            return products
+        } catch (error) {
+            console.error('Error al obtener los productos', error)
         }
-        return this.products
     }
 
-    getProductById(id){
-        return this.products.find(product => product.id === id)
-    }
-
-    addProduct(product){
-        const newProduct = {
-            id: this.products.length ? this.products[this.products.length - 1].id + 1 : 1,
-            ...product,
-            status: true
+    async getAllById(id){
+        try {
+            const product = await Product.findById(id)
+            return product
+        } catch (error) {
+            console.error('Error al obtener el producto', error)
         }
-        this.products.push(newProduct)
-        this.saveToFile()
-        return newProduct
     }
 
-    updateProduct(id, updatedFields){
-        const productIndex = this.products.findIndex(product => product.id === id)
-        if (productIndex === -1) return null;
-
-        const updateProduct = {
-            ...this.products[productIndex],
-            ...updatedFields,
-            id: this.products[productIndex].id // Asegura que el ID no se pise
+    async create(product){
+        try {
+            // Creacion del producto en la DB
+            const newProduct = await Product.create(product)
+            return newProduct
+        } catch (error) {
+            console.error('Error al crear el producto',error)
         }
-        this.products[productIndex] = updateProduct
-        this.saveToFile()
-        return updateProduct;
     }
 
-    deleteProduct(id){
-        const productIndex = this.products.findIndex(product => product.id === id)
-        if (productIndex === -1) return null;
+    async update(id, product){
+        try {
+            const updateProduct = await Product.findByIdAndUpdate(id, product)
+            return updateProduct
+        } catch (error) {
+            console.error('Error al actualizar el producto', error)
+        }
+    }
 
-        const deleteProduct = this.products.splice(productIndex, 1)
-        this.saveToFile()
-        return deleteProduct[0];
+    async delete(id){
+        try {
+            const deleteProduct = await Product.findByIdAndDelete(id)
+            return deleteProduct   
+        } catch (error) {
+            console.error('Error al eliminar el producto', error)
+        }
     }
 }

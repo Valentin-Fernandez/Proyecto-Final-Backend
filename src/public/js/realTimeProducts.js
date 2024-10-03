@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <p>Price: $${product.price}</p>
                 <p>Stock: ${product.stock}</p>
                 <p>Categoria: ${product.category}</p>
-                <button class="delete_product" data-id="${product.id}">Eliminar</button>
+                <button class="delete_product" data-id="${product._id}">Eliminar</button>
             `;
             containerProduct.appendChild(productDiv);
         });
@@ -27,11 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     };
-
-    // Escuchar evento
-    socket.on('updateProducts', (products) => {
-        updateProductList(products);
-    });
 
     // Enviar nuevo producto al servidor
     productForm.addEventListener('submit', (e) => {

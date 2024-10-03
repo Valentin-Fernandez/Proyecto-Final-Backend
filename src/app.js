@@ -1,10 +1,13 @@
 import express from 'express'
 import product from './routes/products.router.js';
 import cart from './routes/carts.router.js';
+import views from './routes/views.router.js'
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import ProductManager from './service/ProductManager.js';
+import Product from './models/products.js'
+import mongoose from 'mongoose';
 const app = express()
 const PORT = 8080
 
@@ -19,8 +22,24 @@ app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'))
 
 
-app.use('/api', product);
-app.use('/api', cart);
+app.use('/api/products', product);
+app.use('/api/cart', cart);
+app.use('/', views)
+
+// Conexion a DB
+const urlDB = 'mongodb://localhost:27017/proyectofinal'
+
+const connectMongoDB = async () => {
+    try {
+        await mongoose.connect(urlDB)
+        console.log('Conexion exitosa');
+    } catch (error) {
+        console.error(error);
+        process.exit()
+    }
+}
+
+connectMongoDB()
 
 const httpServer = app.listen(PORT, () => {
     console.log(`RUN SERVER: http://localhost:${PORT}`)
@@ -29,30 +48,29 @@ const httpServer = app.listen(PORT, () => {
 // Inicializamos socket
 const productManager = new ProductManager()
 const io = new Server(httpServer)
-io.on('connection', socket => {
-    console.log('Nuevo cliente conectado');
+io.on('connection', async socket => {
 
-    // Detecto que alguien entro en la pagina
-    const products = productManager.getAllProducts()
-    io.emit('mostrarProductos', products)
+    // Detecto al cliente nuevo conectado
+    console.log('Nuevo cliente conectado');
+    async function mostrarProductos() {
+        const products = await productManager.getAll()
+        io.emit('mostrarProductos', products)
+    }
+    mostrarProductos()
 
     // Crear de un producto
-    socket.on('createProduct', data => {
-        productManager.addProduct(data)
-        const updatedProducts = productManager.getAllProducts();
-        io.emit('updateProducts', updatedProducts)
+    socket.on('createProduct', async data => {
+        productManager.create(data)
+        /* const updatedProducts = await productManager.getAll();
+        io.emit('updateProducts', updatedProducts) */
+        mostrarProductos()
     });
 
     // Eliminar producto
-    socket.on('deleteProduct', id => {
-        const productDelete = productManager.deleteProduct(parseInt(id))
+    socket.on('deleteProduct', async id => {
+        const productDelete = await productManager.delete(id)
         if (productDelete) {
-            const updatedProducts = productManager.getAllProducts();
-            io.emit('updateProducts', updatedProducts)
+            mostrarProductos()
         }   
-    })
-
-
-
-    
+    }) 
 });
