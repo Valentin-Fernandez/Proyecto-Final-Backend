@@ -44,7 +44,7 @@ router.get('/', async (req, res) => {
           });
 
     } catch (error) {
-        res.json({status: "Error", message: error});
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
@@ -58,7 +58,7 @@ router.get('/:pid', async (req, res) => {
             res.status(404).json({error: "Producto no encontrado"})
         }
     } catch (error) {
-        console.log(error);
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
@@ -72,7 +72,7 @@ router.post('/', async (req, res) => {
         const newProduct = await productManager.create({title, description, price, stock, category})
         res.status(201).json(newProduct)
     } catch (error) {
-        console.log(error);
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
@@ -87,7 +87,7 @@ router.put('/:pid', async (req, res) => {
             res.status(404).json({status: "Error, producto no encontrado"})
         }
     } catch (error) {
-        console.log(error);
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
@@ -102,9 +102,8 @@ router.delete('/:pid', async (req, res) => {
             res.status(404).json({error: "El producto no fue borrado"})
         }
     } catch (error) {
-        console.log(error);
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
-
 
 export default router;

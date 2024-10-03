@@ -16,7 +16,7 @@ export default class CartManager {
 
     async getCartById(cartId){
         try {
-            const cart = await Cart.findById(cartId).populate('products.product').lean();
+            const cart = await Cart.findById(cartId).populate('products.product').lean()
             return cart
         } catch (error) {
             console.error('Error al obtener el carrito:', error);
@@ -49,6 +49,24 @@ export default class CartManager {
             return cart
         } catch (error) {
             console.error('Error al remplazar los productos')
+        }
+    }
+
+    async updateQuantity(cartId, productId, quantityBody) {
+        try {
+            const cart = await Cart.findById(cartId)
+            const productIndex = cart.products.findIndex(p => p.product.toString() === productId)
+            if (productIndex !== -1) {
+                // Se encontro el producto en el carrito
+                cart.products[productIndex].quantity = quantityBody
+                await cart.save()
+                return cart
+            } else {
+                throw new Error('Producto no encontrado en el carrito');
+            }
+        } catch (error) {
+            console.error('Error al modificar la cantidad de productos', error)
+            throw error
         }
     }
 

@@ -6,7 +6,6 @@ import __dirname from './utils.js';
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
 import ProductManager from './service/ProductManager.js';
-import Product from './models/products.js'
 import mongoose from 'mongoose';
 const app = express()
 const PORT = 8080
@@ -21,26 +20,25 @@ app.use(express.json()) // -> Manejo de JSON
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'))
 
-
+// Rutas
 app.use('/api/products', product);
 app.use('/api/cart', cart);
 app.use('/', views)
 
 // Conexion a DB
 const urlDB = 'mongodb://localhost:27017/proyectofinal'
-
 const connectMongoDB = async () => {
     try {
         await mongoose.connect(urlDB)
-        console.log('Conexion exitosa');
+        console.log('Conexion exitosa a la DB');
     } catch (error) {
         console.error(error);
         process.exit()
     }
 }
-
 connectMongoDB()
 
+// Inicio del servidor
 const httpServer = app.listen(PORT, () => {
     console.log(`RUN SERVER: http://localhost:${PORT}`)
 })
@@ -61,8 +59,6 @@ io.on('connection', async socket => {
     // Crear de un producto
     socket.on('createProduct', async data => {
         productManager.create(data)
-        /* const updatedProducts = await productManager.getAll();
-        io.emit('updateProducts', updatedProducts) */
         mostrarProductos()
     });
 

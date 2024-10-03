@@ -12,10 +12,10 @@ router.get('/:cid', async (req, res) => {
         if (cart) {
             res.json({status: "Success", payload: cart})
         } else {
-            res.status(404).json({error: "Carrito no encontrado"})
+            res.json({error: "Carrito no encontrado"})
         }
     } catch (error) {
-        console.log(error);
+        res.status(500).json({ message: 'Error del servidor' });
     } 
 })
 
@@ -25,7 +25,7 @@ router.post('/', async (req, res) => {
         const newCart = await cartManager.createCart()
         res.json({status: "Success", payload: newCart})
     } catch (error) {
-        console.log(error);
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
@@ -37,10 +37,11 @@ router.post('/:cid/product/:pid', async (req, res) => {
         cartManager.addProductToCart(cartId, productId, quantity)
         res.json({status: "Success"})
     } catch (error) {
-        console.error("No se encontro el carrito", error)
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
+// PUT
 router.put('/:cid', async (req, res) => {
     try {
         const cartId = req.params.cid
@@ -48,10 +49,23 @@ router.put('/:cid', async (req, res) => {
         const cart = await cartManager.updateCart(cartId, products)
         res.json({status: "Success", payload: cart})
     } catch (error) {
-        console.error("Error", error)
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
+router.put('/:cid/product/:pid', async (req, res) => {
+    try {
+        const cartId = req.params.cid
+        const productId = req.params.pid
+        const {quantity} = req.body
+        const cart = await cartManager.updateQuantity(cartId, productId, quantity)
+        res.json({status: "Success", payload: cart})
+    } catch (error) {
+        res.status(500).json({ message: 'Error del servidor' });
+    }
+})
+
+// DELETE
 router.delete('/:cid/product/:pid', async (req, res) => {
     try {
         const cartId = req.params.cid
@@ -64,7 +78,7 @@ router.delete('/:cid/product/:pid', async (req, res) => {
         }
         
     } catch (error) {
-        console.error('Error al eliminar el producto del carrito', error)
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
 
@@ -74,7 +88,8 @@ router.delete('/:cid', async (req, res) => {
         const cart = cartManager.clearCart(cartId)
         res.json({status: "Success", payload: cart})
     } catch (error) {
-        console.error(error)
+        res.status(500).json({ message: 'Error del servidor' });
     }
 })
+
 export default router;

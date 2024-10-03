@@ -1,5 +1,7 @@
 {{#if isValid}}
 <div>
+    <p>Cart ID: {{cartId}}</p>
+     <!-- Para verificar la acción del formulario -->
     {{#each docs}}
     <div>
         <h2>{{this.title}}</h2>
@@ -7,6 +9,9 @@
         <p>Price: ${{this.price}}</p>
         <p>Stock: {{this.stock}}</p>
         <p>Categoria: {{this.category}}</p>
+        <form action="api/cart/{{../cartId}}/product/{{this._id}}" method="POST">
+            <button type="submit">Agregar al carrito</button>
+        </form>      
     </div>
     <br>
     {{/each}}
