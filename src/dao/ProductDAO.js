@@ -1,21 +1,13 @@
 import Product from '../models/products.js'
 
 export default class ProductManager {
-    constructor(path) {
-        this.path = path
-    }
 
     // Metodos
-    async getAll(){
-        try {
-            const products = await Product.find().lean()
-            return products
-        } catch (error) {
-            console.error('Error al obtener los productos', error)
-        }
+    static async getAll(query, options){
+        return await Product.paginate(query, options)
     }
 
-    async getAllById(id){
+    static async getAllById(id){
         try {
             const product = await Product.findById(id)
             return product
@@ -24,7 +16,7 @@ export default class ProductManager {
         }
     }
 
-    async create(product){
+    static async create(product){
         try {
             // Creacion del producto en la DB
             const newProduct = await Product.create(product)
@@ -34,7 +26,7 @@ export default class ProductManager {
         }
     }
 
-    async update(id, product){
+    static async update(id, product){
         try {
             const updateProduct = await Product.findByIdAndUpdate(id, product)
             return updateProduct
@@ -43,7 +35,7 @@ export default class ProductManager {
         }
     }
 
-    async delete(id){
+    static async delete(id){
         try {
             const deleteProduct = await Product.findByIdAndDelete(id)
             return deleteProduct   

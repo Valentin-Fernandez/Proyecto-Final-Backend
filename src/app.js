@@ -5,7 +5,7 @@ import views from './routes/views.router.js'
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars'
 import { Server } from 'socket.io'
-import ProductManager from './service/ProductManager.js';
+/* import ProductManager from './service/ProductManager.js'; */
 import mongoose from 'mongoose';
 const app = express()
 const PORT = 8080
@@ -44,7 +44,7 @@ const httpServer = app.listen(PORT, () => {
 })
 
 // Inicializamos socket
-const productManager = new ProductManager()
+/* const productManager = new ProductManager()
 const io = new Server(httpServer)
 io.on('connection', async socket => {
 
@@ -69,4 +69,4 @@ io.on('connection', async socket => {
             mostrarProductos()
         }   
     }) 
-});
+}); */

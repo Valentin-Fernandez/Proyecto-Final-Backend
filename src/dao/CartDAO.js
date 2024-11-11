@@ -1,11 +1,8 @@
 import Cart from '../models/carts.js'
 
-export default class CartManager {
-    constructor(path) {
-        this.path = path
-    }
+export default class CartDAO {
 
-    async createCart() {
+    static async createCart() {
         try {
             const newCart = Cart.create({products: []})
             return newCart
@@ -14,7 +11,7 @@ export default class CartManager {
         }
     }
 
-    async getCartById(cartId){
+    static async getCartById(cartId){
         try {
             const cart = await Cart.findById(cartId).populate('products.product').lean()
             return cart
@@ -23,7 +20,7 @@ export default class CartManager {
         }
     }
 
-    async addProductToCart(cartId, productId, quantity = 1) {
+    static async addProductToCart(cartId, productId, quantity = 1) {
         try {
             const cart = await Cart.findById(cartId)
             const productIndex = cart.products.findIndex(p => p.product.toString() === productId)
@@ -41,7 +38,7 @@ export default class CartManager {
         }
     }
 
-    async updateCart(cartId, products) {
+    static async updateCart(cartId, products) {
         try {
             const cart = await Cart.findById(cartId)
             cart.products = products
@@ -52,7 +49,7 @@ export default class CartManager {
         }
     }
 
-    async updateQuantity(cartId, productId, quantityBody) {
+    static async updateQuantity(cartId, productId, quantityBody) {
         try {
             const cart = await Cart.findById(cartId)
             const productIndex = cart.products.findIndex(p => p.product.toString() === productId)
@@ -70,7 +67,7 @@ export default class CartManager {
         }
     }
 
-    async removeProduct(cartId, productId) {
+    static async removeProduct(cartId, productId) {
         try {
             const cart = await Cart.findById(cartId)
             cart.products = cart.products.filter(p => p.product.toString() !== productId)
@@ -81,7 +78,7 @@ export default class CartManager {
         }
     }
 
-    async clearCart(cartId) {
+    static async clearCart(cartId) {
         try {
             const cart = await Cart.findById(cartId)
             cart.products = []
