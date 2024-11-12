@@ -1,0 +1,11 @@
+<main class="flex justify-center flex-col items-center">
+    <h2 class="text-4xl m-4 uppercase font-bold">Register</h2>
+    <form action="api/sessions/register" method="post" class="flex flex-col justify-center p-4 bg-gray-700 rounded-xl">
+        <input type="text" name="first_name" placeholder="nombre" class="mb-4 bg-gray-700 focus:outline-none rounded-md p-2 text-white border-2 border-gray-500">
+        <input type="text" name="last_name" placeholder="apellido" class="mb-4 bg-gray-700 focus:outline-none rounded-md p-2 text-white border-2 border-gray-500">
+        <input type="number" name="age" placeholder="edad" class="mb-4 bg-gray-700 focus:outline-none rounded-md p-2 text-white border-2 border-gray-500">
+        <input type="text" name="email" placeholder="email" class="mb-4 bg-gray-700 focus:outline-none rounded-md p-2 text-white border-2 border-gray-500">
+        <input type="text" {{!-- type="password" --}} name="password" placeholder="password" class="mb-4 bg-gray-700 focus:outline-none rounded-md p-2 text-white border-2 border-gray-500">
+        <button class="bg-gray-800 rounded-md p-2 text-white">Enviar</button>
+    </form>
+</main>

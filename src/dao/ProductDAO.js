@@ -1,6 +1,6 @@
 import Product from '../models/products.js'
 
-export default class ProductManager {
+export default class ProductDAO {
 
     // Metodos
     static async getAll(query, options){
@@ -41,6 +41,16 @@ export default class ProductManager {
             return deleteProduct   
         } catch (error) {
             console.error('Error al eliminar el producto', error)
+        }
+    }
+
+    // Socket
+    static async getAllSocket() {
+        try {
+            const products = await Product.find()
+            return products
+        } catch (error) {
+            console.error('Error al obtener los productos', error)
         }
     }
 }

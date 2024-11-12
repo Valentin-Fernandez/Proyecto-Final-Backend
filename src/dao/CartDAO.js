@@ -2,9 +2,9 @@ import Cart from '../models/carts.js'
 
 export default class CartDAO {
 
-    static async createCart() {
+    static async createCart(userId) {
         try {
-            const newCart = Cart.create({products: []})
+            const newCart = Cart.create({products: [], user: userId})
             return newCart
         } catch (error) {
             console.error('Error al crear el carrito:', error);

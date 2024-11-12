@@ -1,12 +1,19 @@
+import dotenv from 'dotenv'
+dotenv.config() // .env
+console.log(process.env.PRIVATE_KEY);
 import express from 'express'
+import passport from 'passport';
 import product from './routes/products.router.js';
 import cart from './routes/carts.router.js';
 import views from './routes/views.router.js'
+import session from './routes/session.router.js'
 import __dirname from './utils.js';
 import handlebars from 'express-handlebars'
+import cookieParser from 'cookie-parser';
 import { Server } from 'socket.io'
-/* import ProductManager from './service/ProductManager.js'; */
+import ProductRepository from './repositories/ProductRepository.js';
 import mongoose from 'mongoose';
+import initializePassport from './config/passport.config.js'
 const app = express()
 const PORT = 8080
 
@@ -19,10 +26,14 @@ app.set('view engine', 'handlebars')
 app.use(express.json()) // -> Manejo de JSON
 app.use(express.urlencoded({extended: true}))
 app.use(express.static(__dirname + '/public'))
+app.use(cookieParser())
+initializePassport()
+app.use(passport.initialize())
 
 // Rutas
 app.use('/api/products', product);
 app.use('/api/cart', cart);
+app.use('/api/sessions', session)
 app.use('/', views)
 
 // Conexion a DB
@@ -44,29 +55,28 @@ const httpServer = app.listen(PORT, () => {
 })
 
 // Inicializamos socket
-/* const productManager = new ProductManager()
 const io = new Server(httpServer)
 io.on('connection', async socket => {
 
     // Detecto al cliente nuevo conectado
     console.log('Nuevo cliente conectado');
     async function mostrarProductos() {
-        const products = await productManager.getAll()
+        const products = await ProductRepository.getAllSocket()
         io.emit('mostrarProductos', products)
     }
     mostrarProductos()
 
     // Crear de un producto
     socket.on('createProduct', async data => {
-        productManager.create(data)
+        ProductRepository.createProduct(data)
         mostrarProductos()
     });
 
     // Eliminar producto
     socket.on('deleteProduct', async id => {
-        const productDelete = await productManager.delete(id)
+        const productDelete = await ProductRepository.deleteProduct(id)
         if (productDelete) {
             mostrarProductos()
         }   
     }) 
-}); */
+});

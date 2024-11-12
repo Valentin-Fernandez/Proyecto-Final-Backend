@@ -32,4 +32,9 @@ export default class ProductRepository {
         const deleteProduct = await ProductDAO.delete(id)
         return deleteProduct
     }
+
+    static async getAllSocket() {
+        const products = await ProductDAO.getAllSocket()
+        return products
+    }
 }

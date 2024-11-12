@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Product from "../models/products.js";
 import CartManager from "../dao/CartDAO.js";
+import ProductRepository from "../repositories/ProductRepository.js";
 
 const router = Router()
 const cartManager = new CartManager()
@@ -8,7 +9,7 @@ const cartManager = new CartManager()
 // GET vista index.handlebars
 router.get('/', async (req, res) => {
     try {
-        const {page = 1, category, price, cartId} = req.query
+        const {page = 1, category, price} = req.query
 
         // Categoria
         let query = {}
@@ -22,23 +23,18 @@ router.get('/', async (req, res) => {
             sortOption.price = price === 'asc' ? 1 : -1
         }
 
-        let result = await Product.paginate(query, {
-            page: parseInt(page),
-            limit: 5,
-            lean: true,
-            sort: sortOption
-        })
+        let result = await ProductRepository.getAllProducts(query, page, 5, sortOption)
 
         // Creacion de carrito
-        if (!cartId) {
+        /* if (!cartId) {
             const newCart = await cartManager.createCart()
             result.cartId = newCart._id.toString()
         } else {
             result.cartId = cartId
-        }
+        } */
         
-        result.prevLink = result.hasPrevPage ? `http://localhost:8080/?page=${result.prevPage}&cartId=${result.cartId}` : '';
-        result.nextLink = result.hasNextPage ? `http://localhost:8080/?page=${result.nextPage}&cartId=${result.cartId}` : '';
+        result.prevLink = result.hasPrevPage ? `http://localhost:8080/?page=${result.prevPage}` : '';
+        result.nextLink = result.hasNextPage ? `http://localhost:8080/?page=${result.nextPage}` : '';
 
         result.isValid = !(page <= 0 || page > result.totalPages)
 
@@ -71,6 +67,14 @@ router.get('/cart/:cid', async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: 'Error del servidor' });
     }
+})
+
+router.get('/register', (req, res) => {
+    res.render('register')
+})
+
+router.get('/login', (req, res) => {
+    res.render('login')
 })
 
 export default router;
