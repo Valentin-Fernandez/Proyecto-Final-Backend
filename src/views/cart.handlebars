@@ -7,6 +7,9 @@
             <h4>Cantidad: {{quantity}}</h4>
             <h4>ID del Producto: {{id}}</h4>
         {{/each}}
+        <form action="/api/cart/{{cartId}}/purchase" method="get">
+            <button>Finalizar compra</button>
+        </form>
     {{else}}
         <p>No hay productos en el carrito.</p>
     {{/if}}

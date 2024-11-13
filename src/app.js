@@ -1,6 +1,5 @@
 import dotenv from 'dotenv'
 dotenv.config() // .env
-console.log(process.env.PRIVATE_KEY);
 import express from 'express'
 import passport from 'passport';
 import product from './routes/products.router.js';

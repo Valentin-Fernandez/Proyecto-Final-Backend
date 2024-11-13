@@ -1,4 +1,5 @@
 import CartRepository from '../repositories/CartRepository.js'
+import ProductRepository from '../repositories/ProductRepository.js'
 
 export default class CartController {
 
@@ -76,6 +77,47 @@ export default class CartController {
             res.json({status: "Success", payload: cart})
         } catch (error) {
             res.status(500).json({ message: 'Error del servidor' });
+        }
+    }
+
+    static async purchase(req, res) {
+        try {
+            const cartId = req.params.cid
+            const cart = await CartRepository.getCartById(cartId)
+            if (!cart) {
+                res.json({status: "No existe ningun carrito"})
+            }
+
+            const cartFinish = []
+            const productsDelegate = []
+
+            // Stock
+            for (const item of cart.products) {
+                const idProduct = item._id
+                console.log(idProduct)
+                const product = await ProductRepository.getByIdProduct(item.product)
+                console.log('PRODUCT: ', product)
+                
+                if (item.quantity <= product.stock) {
+                    product.stock -= item.quantity
+                    await ProductRepository.updateProduct(item.id, {stock: product.stock})
+                    cartFinish.push(item)
+                } else {
+                    productsDelegate.push(item)
+                }
+            }
+
+            const ticket = {
+                userId: cart.user,
+                products : cartFinish,
+                total : cartFinish.reduce((sum, item) => sum + item.product.price * item.product.quantity, 0)
+            }
+
+            console.log(ticket)
+
+        } catch (error) {
+            console.error('Error', error)
+            res.status(500).json({ message: 'Error del servidor' })
         }
     }
 }
