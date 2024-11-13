@@ -1,4 +1,5 @@
 import UserDAO from "../dao/UserDAO.js";
+import userDTO from "../dto/UserDTO.js";
 
 export default class UserRepository {
 
@@ -17,7 +18,9 @@ export default class UserRepository {
     }
 
     static async current(){
-        return await UserDAO.getAllUsers()
+        const users = await UserDAO.getAllUsers()
+        const usersDTO = users.map(user => new userDTO(user))
+        return usersDTO
     }
 
 }
