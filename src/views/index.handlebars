@@ -1,21 +1,21 @@
 {{#if isValid}}
-<div>
+<div class="flex space-x-2 p-8">
      <!-- Para verificar la acción del formulario -->
     {{#each docs}}
-    <div>
-        <h2>{{this.title}}</h2>
-        <p>Description: {{this.description}}</p>
-        <p>Price: ${{this.price}}</p>
+    <div class="bg-gray-600 rounded-lg flex flex-col justify-center items-center text-white p-4">
+        <h2 class="text-md font-bold">{{this.title}}</h2>
+        <p class="text-sm text-gray-100">Description: {{this.description}}</p>
+        <p class="text-md font-bold">Price: ${{this.price}}</p>
         <p>Stock: {{this.stock}}</p>
-        <p>Categoria: {{this.category}}</p>
-        <form action="api/cart/{{../cartId}}/product/{{this._id}}" method="POST">
-            <button type="submit">Agregar al carrito</button>
+        <p class="text-gray-100 text-sm">Categoria: {{this.category}}</p>
+        <form action="api/cart/{{../cartId}}/product/{{this._id}}" method="POST" class="pt-2">
+            <button type="submit" class="p-2 rounded-lg bg-gray-500 text-white">Agregar al carrito</button>
         </form>      
     </div>
     <br>
     {{/each}}
 </div>
-<div>
+<div class="flex items-center justify-center">
     {{#if hasPrevPage}}
     <a href={{this.prevLink}}>
         << Anterior </a>

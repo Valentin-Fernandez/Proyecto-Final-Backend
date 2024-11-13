@@ -2,6 +2,8 @@ import { Router } from "express";
 import Product from "../models/products.js";
 import CartManager from "../dao/CartDAO.js";
 import ProductRepository from "../repositories/ProductRepository.js";
+import passport from "passport";
+import { authorization } from "../middlewares/authorization.js";
 
 const router = Router()
 const cartManager = new CartManager()
@@ -45,7 +47,7 @@ router.get('/', async (req, res) => {
 })
 
 // GET vista realTimeProducts.handlebars
-router.get('/realtimeproducts', (req, res) => {
+router.get('/realtimeproducts', passport.authenticate('jwt', { session: false }), authorization(['ADMIN']), (req, res) => {
     res.render('realTimeProducts')
 })
 
