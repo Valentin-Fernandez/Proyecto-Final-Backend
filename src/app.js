@@ -36,7 +36,7 @@ app.use('/api/sessions', session)
 app.use('/', views)
 
 // Conexion a DB
-const urlDB = 'mongodb://localhost:27017/proyectofinal'
+const urlDB = process.env.URL_DB
 const connectMongoDB = async () => {
     try {
         await mongoose.connect(urlDB)

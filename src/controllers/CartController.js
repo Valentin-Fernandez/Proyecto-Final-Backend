@@ -1,5 +1,6 @@
 import CartRepository from '../repositories/CartRepository.js'
 import ProductRepository from '../repositories/ProductRepository.js'
+import TicketRepository from '../repositories/TicketRepository.js'
 
 export default class CartController {
 
@@ -13,6 +14,7 @@ export default class CartController {
                 res.json({error: "Carrito no encontrado"})
             }
         } catch (error) {
+            console.error(error)
             res.status(500).json({ message: 'Error del servidor' });
         } 
     }
@@ -82,42 +84,58 @@ export default class CartController {
 
     static async purchase(req, res) {
         try {
-            const cartId = req.params.cid
-            const cart = await CartRepository.getCartById(cartId)
+            const cartId = req.params.cid;
+            const cart = await CartRepository.getCartById(cartId);
+            
             if (!cart) {
-                res.json({status: "No existe ningun carrito"})
+                return res.json({ status: "No existe ningun carrito" });
             }
-
-            const cartFinish = []
-            const productsDelegate = []
-
-            // Stock
+    
+            const cartFinish = [];
+            const productsDelegate = [];
+    
+            // Validación y actualización de stock
             for (const item of cart.products) {
-                const idProduct = item._id
-                console.log(idProduct)
-                const product = await ProductRepository.getByIdProduct(item.product)
-                console.log('PRODUCT: ', product)
-                
+                const idProduct = item.product;
+                const product = await ProductRepository.getByIdProduct(idProduct);
+    
                 if (item.quantity <= product.stock) {
-                    product.stock -= item.quantity
-                    await ProductRepository.updateProduct(item.id, {stock: product.stock})
-                    cartFinish.push(item)
+                    product.stock -= item.quantity;
+                    await ProductRepository.updateProduct(idProduct, { stock: product.stock });
+                    cartFinish.push(item);  // Producto disponible, agregar a cartFinish
                 } else {
-                    productsDelegate.push(item)
+                    productsDelegate.push(item);  // Producto sin stock suficiente
                 }
             }
-
-            const ticket = {
+    
+            const ticketData = {
                 userId: cart.user,
-                products : cartFinish,
-                total : cartFinish.reduce((sum, item) => sum + item.product.price * item.product.quantity, 0)
-            }
-
-            console.log(ticket)
-
+                products: cartFinish.map(item => ({
+                    productId: item.product,
+                    quantity: item.quantity,
+                    price: item.price,
+                })),
+                totalPrice: cartFinish.reduce((sum, item) => sum + item.price * item.quantity, 0),
+                dateTicket: new Date(),
+            };
+    
+            const ticket = await TicketRepository.createTicket(ticketData);
+    
+            // Filtrar productos sin stock en el carrito y actualizarlo
+            const updatedCartProducts = cart.products.filter(
+                item => !productsDelegate.some(p => p.product.toString() === item.product.toString())
+            );
+    
+            await CartRepository.updateCart(cartId, { products: updatedCartProducts });
+    
+            return res.status(200).json({
+                ticket,
+                productsDelegate,
+            });
         } catch (error) {
-            console.error('Error', error)
-            res.status(500).json({ message: 'Error del servidor' })
+            console.error("Error", error);
+            res.status(500).json({ message: "Error del servidor" });
         }
     }
+    
 }
