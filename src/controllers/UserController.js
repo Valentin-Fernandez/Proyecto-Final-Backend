@@ -25,7 +25,7 @@ export default class UserController {
             const result = await UserRepository.createUser(newUser)
 
             // Creacion del carrito
-            const newCart = await CartRepository.createCart(result._id)
+            const newCart = await CartRepository.createCart(result.email)
 
             // Referencia
             await UserRepository.updateUserCart(result._id, newCart._id)

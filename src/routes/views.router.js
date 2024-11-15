@@ -66,6 +66,7 @@ router.get('/cart/:cid', async (req, res) => {
             res.json({status: "Error", message: "No existe ese carrito"})
         }
     } catch (error) {
+        console.error(error)
         res.status(500).json({ message: 'Error del servidor' });
     }
 })

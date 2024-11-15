@@ -1,6 +1,7 @@
 import CartRepository from '../repositories/CartRepository.js'
 import ProductRepository from '../repositories/ProductRepository.js'
 import TicketRepository from '../repositories/TicketRepository.js'
+import UserRepository from '../repositories/UserRepository.js'
 
 export default class CartController {
 
@@ -86,7 +87,6 @@ export default class CartController {
         try {
             const cartId = req.params.cid;
             const cart = await CartRepository.getCartById(cartId);
-            
             if (!cart) {
                 return res.json({ status: "No existe ningun carrito" });
             }
@@ -109,28 +109,17 @@ export default class CartController {
             }
     
             const ticketData = {
-                userId: cart.user,
-                products: cartFinish.map(item => ({
-                    productId: item.product,
-                    quantity: item.quantity,
-                    price: item.price,
-                })),
-                totalPrice: cartFinish.reduce((sum, item) => sum + item.price * item.quantity, 0),
                 dateTicket: new Date(),
+                totalPrice: cartFinish.reduce((sum, item) => sum + item.product.price * item.quantity, 0),
+                email: cart.email
             };
-    
+
             const ticket = await TicketRepository.createTicket(ticketData);
-    
-            // Filtrar productos sin stock en el carrito y actualizarlo
-            const updatedCartProducts = cart.products.filter(
-                item => !productsDelegate.some(p => p.product.toString() === item.product.toString())
-            );
-    
-            await CartRepository.updateCart(cartId, { products: updatedCartProducts });
+            const cartUpdated = await CartRepository.updateCart(cartId, productsDelegate);
     
             return res.status(200).json({
                 ticket,
-                productsDelegate,
+                cartUpdated,
             });
         } catch (error) {
             console.error("Error", error);

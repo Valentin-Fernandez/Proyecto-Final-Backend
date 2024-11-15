@@ -1,18 +1,13 @@
 import moongose from 'mongoose'
+import { v4 as uuidv4 } from 'uuid';
 
 // Collection
 const ticketCollection = 'tickets'
-const ticketSchema = new moongose.Schema({
-    userId: {type: moongose.Schema.Types.ObjectId, ref: 'users', required: true},
-    products: [
-        {
-            productId: {type: moongose.Schema.Types.ObjectId, ref: 'products', required: true},
-            quantity: {type: Number, required: true},
-            price: {type: Number, required: true}
-        }
-    ],
+const ticketSchema = new moongose.Schema({ 
+    code: {type: String, unique: true, default: uuidv4},   
+    dateTicket: {type: Date, required: true},
     totalPrice: {type: Number, required: true},
-    dateTicket: {type: Date, required: true}
+    email: {type: String}
 })
 
 const Ticket = moongose.model(ticketCollection, ticketSchema)

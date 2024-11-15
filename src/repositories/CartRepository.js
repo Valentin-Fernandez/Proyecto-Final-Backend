@@ -6,8 +6,8 @@ export default class CartRepository {
         const cart = await CartDAO.getCartById(id)
         return cart
     }
-    static async createCart(userId) {
-        const newCart = await CartDAO.createCart(userId)
+    static async createCart(email) {
+        const newCart = await CartDAO.createCart(email)
         return newCart
     }
     static async addProductToCart(cartId, productId, quantity) {
