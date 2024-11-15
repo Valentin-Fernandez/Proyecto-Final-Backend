@@ -1,16 +1,19 @@
-<div>
-    <h1>Carrito</h1>
-    {{#if products.length}}
-        {{#each products}}
-            <h2>Producto: {{title}}</h2>
-            <h4>Precio: {{price}}</h4>
-            <h4>Cantidad: {{quantity}}</h4>
-            <h4>ID del Producto: {{id}}</h4>
-        {{/each}}
-        <form action="/api/cart/{{cartId}}/purchase" method="get">
-            <button>Finalizar compra</button>
+<div class="flex flex-col items-center justify-center">
+    <h1 class="text-3xl p-2">Carrito</h1>
+    <div class="bg-gray-500 p-4 rounded-lg text-white">
+        {{#if products.length}}
+            {{#each products}}
+                <h2>Producto: {{title}}</h2>
+                <h4>Precio: {{price}}</h4>
+                <h4>Cantidad: {{quantity}}</h4>
+                <h4>ID del Producto: {{id}}</h4>
+            {{/each}}
+        <form action="/api/cart/{{cartId}}/purchase" method="get" class="flex items-center justify-center p-2">
+            <button class="p-2 rounded-lg bg-gray-600 text-black">Finalizar compra</button>
         </form>
-    {{else}}
-        <p>No hay productos en el carrito.</p>
-    {{/if}}
+        {{else}}
+            <p>No hay productos en el carrito.</p>
+        {{/if}}
+    </div>
+    
 </div>
