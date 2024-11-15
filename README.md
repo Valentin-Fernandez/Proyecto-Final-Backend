@@ -1,12 +1,22 @@
 # Documentación de la API
 
 ---
+## Cuentas ya creadas en la web para hacer las pruebas
+`email: admin@gmail.com`
+`password: 1234`
+`Role: ADMIN`
+
+`email: user@gmail.com`
+`password: 1234`
+`Role: USER`
+
+### en el endpoint de api/sessions/current devuelve todos los users de la DB pero de manera personalizada con el DTO, solamente pueden hacer peticion a esta ruta los ADMINS
 
 ## views.router.js
 
 **Index.handlebars**  
 `http://localhost:8080`  
-En `index.handlebars` se va a crear de manera automática un carrito para que se pueda agregar un producto al mismo. En caso de pasar a páginas siguientes o volver, se va a agregar automáticamente el id de ese carrito en los parámetros, para que al momento de agregar un producto que se encuentre en otra página se agregue al mismo carrito. En caso de sacar el parámetro `cartId`, se va a crear otro carrito nuevo.
+En `index.handlebars` se visualizaran todos los productos que esten en la DB, para poder agregar productos al carrito debemos hacer el registro o logueo previamente. 
 
 ### Filtrar por categoría y ordenar por precio ascendente:
 
@@ -24,11 +34,11 @@ Por defecto, si no ponemos `page`, va a ser igual a 1.
 
 **RealTimeProducts**  
 `http://localhost:8080/realtimeproducts`  
-Aplica websocket.
+Aplica websocket. En esta vista solamente pueden entrar los Administradores ya que desde aca se puede agregar un producto a la DB
 
 **Cart**  
 `http://localhost:8080/cart/:cid`  
-Se van a mostrar los productos agregados al carrito.
+Se van a mostrar los productos agregados al carrito. Se podra finalizar la compra, esto devuelve un Ticket con los detalles(Total, email y fecha de compra)
 
 ---
 
